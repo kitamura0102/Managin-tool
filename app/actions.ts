@@ -83,7 +83,8 @@ export async function createNote(formData: FormData) {
       next_step: nullableString(formData, "next_step"),
       follow_up_date: nullableDate(formData, "follow_up_date"),
       severity: (readString(formData, "severity") || "Low") as Severity,
-      visibility: (readString(formData, "visibility") || "Private note") as Visibility
+      visibility: (readString(formData, "visibility") || "Private note") as Visibility,
+      is_1on1_talking_point: formData.get("is_1on1_talking_point") === "on"
     })
     .select("id, follow_up_date, next_step")
     .single();

@@ -212,10 +212,20 @@ export function NoteForm({ employees, defaultEmployeeId }: NoteFormProps) {
       </section>
 
       <div className="sticky bottom-0 -mx-4 border-t border-line bg-paper/95 px-4 py-3 backdrop-blur lg:mx-0 lg:rounded-md lg:border">
-        <button className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-md bg-ink px-4 py-3 text-sm font-semibold text-white hover:bg-ink/90 sm:w-auto">
-          <NotebookPen aria-hidden="true" className="h-4 w-4" />
-          Add Note
-        </button>
+        <div className="flex flex-wrap items-center gap-4">
+          <button className="focus-ring inline-flex w-full items-center justify-center gap-2 rounded-md bg-ink px-4 py-3 text-sm font-semibold text-white hover:bg-ink/90 sm:w-auto">
+            <NotebookPen aria-hidden="true" className="h-4 w-4" />
+            Add Note
+          </button>
+          <label className="flex cursor-pointer items-center gap-2 text-sm text-ink/70">
+            <input
+              type="checkbox"
+              name="is_1on1_talking_point"
+              className="h-4 w-4 rounded border-line accent-sage"
+            />
+            Add to 1:1 agenda
+          </label>
+        </div>
       </div>
     </form>
   );

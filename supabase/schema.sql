@@ -49,6 +49,7 @@ create table if not exists public.notes (
   follow_up_date date,
   severity text not null default 'Low' check (severity in ('Low', 'Medium', 'High')),
   visibility text not null default 'Private note' check (visibility in ('Private note', 'Manager-ready summary')),
+  is_1on1_talking_point boolean not null default false,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );

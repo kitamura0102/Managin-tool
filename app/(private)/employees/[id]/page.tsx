@@ -37,6 +37,7 @@ export default async function EmployeeProfilePage({
   const notes = (notesResult.data ?? []) as Note[];
   const followUps = (followUpsResult.data ?? []) as unknown as FollowUp[];
   const openFollowUps = followUps.filter((followUp) => followUp.status === "Open");
+  const talkPoints = notes.filter((note) => note.is_1on1_talking_point);
   const highSeverityCount = notes.filter((note) => note.severity === "High").length;
   const categoryCounts = NOTE_CATEGORIES.map((category) => ({
     category,
@@ -143,6 +144,27 @@ export default async function EmployeeProfilePage({
         </div>
 
         <div className="space-y-5">
+          {talkPoints.length > 0 && (
+            <section className="rounded-md border border-sage/40 bg-sage/5 p-4">
+              <div className="mb-3 flex items-center gap-2">
+                <span className="text-base">🗣️</span>
+                <h2 className="text-sm font-semibold uppercase tracking-wide text-sage">1:1 Talk Points</h2>
+                <span className="ml-auto rounded-full bg-sage/20 px-2 py-0.5 text-xs font-semibold text-sage">{talkPoints.length}</span>
+              </div>
+              <div className="space-y-2">
+                {talkPoints.map((note) => (
+                  <div key={note.id} className="rounded-md border border-sage/20 bg-white p-3">
+                    <div className="flex items-center gap-2">
+                      <span className="rounded-md bg-sage/10 px-2 py-0.5 text-xs font-medium text-sage">{note.category}</span>
+                      <span className="text-xs text-ink/40">{formatDate(note.note_date)}</span>
+                    </div>
+                    <p className="mt-2 line-clamp-3 text-sm leading-6 text-ink/75">{note.observation}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
           <section>
             <div className="mb-3 flex items-center justify-between">
               <h2 className="text-sm font-semibold uppercase tracking-wide text-ink/65">Recent Notes</h2>

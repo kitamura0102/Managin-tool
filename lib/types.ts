@@ -44,6 +44,7 @@ export type Note = DbRecord & {
   follow_up_date: string | null;
   severity: Severity;
   visibility: Visibility;
+  is_1on1_talking_point: boolean;
   created_at: string;
   updated_at: string;
   employees?: Pick<Employee, "id" | "full_name" | "role" | "team"> | null;
@@ -113,6 +114,7 @@ type NoteInsert = DbRecord & {
   follow_up_date?: string | null;
   severity?: Severity;
   visibility?: Visibility;
+  is_1on1_talking_point?: boolean;
   created_at?: string;
   updated_at?: string;
 };
