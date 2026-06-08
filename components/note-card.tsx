@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AlertCircle, CheckCircle2, Eye, LockKeyhole } from "lucide-react";
+import { AlertCircle, CheckCircle2, Eye, LockKeyhole, Pencil } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import type { Note } from "@/lib/types";
 
@@ -23,13 +23,22 @@ export function NoteCard({ note, showEmployee = false }: NoteCardProps) {
           {note.severity}
         </span>
         <span className="text-xs text-ink/50">{formatDate(note.note_date)}</span>
-        <span className="ml-auto flex items-center gap-1 text-xs text-ink/45">
-          {note.visibility === "Private note" ? (
-            <LockKeyhole aria-hidden="true" className="h-3.5 w-3.5" />
-          ) : (
-            <Eye aria-hidden="true" className="h-3.5 w-3.5" />
-          )}
-          {note.visibility}
+        <span className="ml-auto flex items-center gap-3">
+          <span className="flex items-center gap-1 text-xs text-ink/45">
+            {note.visibility === "Private note" ? (
+              <LockKeyhole aria-hidden="true" className="h-3.5 w-3.5" />
+            ) : (
+              <Eye aria-hidden="true" className="h-3.5 w-3.5" />
+            )}
+            {note.visibility}
+          </span>
+          <Link
+            href={`/notes/${note.id}/edit`}
+            className="focus-ring flex items-center gap-1 rounded-sm text-xs text-ink/40 hover:text-ink"
+          >
+            <Pencil aria-hidden="true" className="h-3.5 w-3.5" />
+            Edit
+          </Link>
         </span>
       </div>
       {showEmployee && note.employees ? (

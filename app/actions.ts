@@ -188,6 +188,39 @@ export async function createWeeklyReviewWithNotes(formData: FormData) {
   redirect("/weekly-review?saved=1");
 }
 
+export async function updateNote(formData: FormData) {
+  const { supabase } = await getUserContext();
+  const id = readString(formData, "id");
+  const employeeId = readString(formData, "employee_id");
+
+  const { error } = await supabase
+    .from("notes")
+    .update({
+      note_date: readString(formData, "note_date"),
+      category: readString(formData, "category") as NoteCategory,
+      observation: readString(formData, "observation"),
+      expected_behavior: nullableString(formData, "expected_behavior"),
+      impact: nullableString(formData, "impact"),
+      feedback_given: nullableString(formData, "feedback_given"),
+      employee_response: nullableString(formData, "employee_response"),
+      next_step: nullableString(formData, "next_step"),
+      follow_up_date: nullableDate(formData, "follow_up_date"),
+      severity: (readString(formData, "severity") || "Low") as Severity,
+      visibility: (readString(formData, "visibility") || "Private note") as Visibility,
+      is_1on1_talking_point: formData.get("is_1on1_talking_point") === "on"
+    })
+    .eq("id", id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  revalidatePath("/");
+  revalidatePath("/employees");
+  revalidatePath("/follow-ups");
+  redirect(`/employees/${employeeId}`);
+}
+
 export async function updateFollowUpStatus(formData: FormData) {
   const { supabase } = await getUserContext();
   const id = readString(formData, "id");
