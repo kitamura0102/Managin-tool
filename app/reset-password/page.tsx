@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { LockKeyhole } from "lucide-react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
@@ -8,8 +8,18 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 export default function ResetPasswordPage() {
   const router = useRouter();
   const supabase = createSupabaseBrowserClient();
+  const [ready, setReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY") {
+        setReady(true);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [supabase]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -36,6 +46,14 @@ export default function ResetPasswordPage() {
 
     router.push("/");
     router.refresh();
+  }
+
+  if (!ready) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-paper px-4 py-10">
+        <p className="text-sm text-ink/60">Verifying reset link…</p>
+      </main>
+    );
   }
 
   return (

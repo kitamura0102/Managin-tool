@@ -11,6 +11,7 @@ export function AuthForm() {
   const [mode, setMode] = useState<"sign-in" | "sign-up">("sign-in");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -35,6 +36,28 @@ export function AuthForm() {
 
     router.push("/");
     router.refresh();
+  }
+
+  async function handleForgotPassword(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    const formData = new FormData(event.currentTarget);
+    const email = String(formData.get("email") ?? "");
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+
+    setLoading(false);
+
+    if (error) {
+      setError(error.message);
+      return;
+    }
+
+    setResetSent(true);
   }
 
   return (
@@ -108,6 +131,37 @@ export function AuthForm() {
           {loading ? "Working..." : mode === "sign-in" ? "Sign in" : "Create account"}
         </button>
       </form>
+
+      {mode === "sign-in" && (
+        <div className="mt-4 border-t border-line pt-4">
+          {resetSent ? (
+            <p className="text-center text-sm text-ink/60">Check your email for a password reset link.</p>
+          ) : (
+            <form onSubmit={handleForgotPassword} className="space-y-3">
+              <p className="text-xs font-medium text-ink/50">Forgot your password?</p>
+              <div className="flex gap-2">
+                <span className="flex flex-1 items-center gap-2 rounded-md border border-line bg-white px-3 py-2 focus-within:ring-2 focus-within:ring-sage/25">
+                  <Mail aria-hidden="true" className="h-4 w-4 text-ink/40" />
+                  <input
+                    name="email"
+                    type="email"
+                    required
+                    className="w-full bg-transparent text-sm outline-none"
+                    placeholder="you@example.com"
+                  />
+                </span>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="focus-ring rounded-md border border-line bg-white px-3 py-2 text-sm font-medium text-ink hover:bg-paper disabled:opacity-60"
+                >
+                  Send reset
+                </button>
+              </div>
+            </form>
+          )}
+        </div>
+      )}
     </div>
   );
 }
