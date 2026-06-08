@@ -42,6 +42,8 @@ export type Note = DbRecord & {
   employee_response: string | null;
   next_step: string | null;
   follow_up_date: string | null;
+  complaints: string | null;
+  case_review_comments: string | null;
   severity: Severity;
   visibility: Visibility;
   is_1on1_talking_point: boolean;
@@ -112,6 +114,8 @@ type NoteInsert = DbRecord & {
   employee_response?: string | null;
   next_step?: string | null;
   follow_up_date?: string | null;
+  complaints?: string | null;
+  case_review_comments?: string | null;
   severity?: Severity;
   visibility?: Visibility;
   is_1on1_talking_point?: boolean;

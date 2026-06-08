@@ -123,6 +123,27 @@ export function NoteEditForm({ note }: NoteEditFormProps) {
             </label>
           </div>
 
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="block">
+              <span className="text-sm font-medium text-ink">Complaints / Concerns</span>
+              <textarea
+                name="complaints"
+                rows={3}
+                defaultValue={note.complaints ?? ""}
+                className="focus-ring mt-1 w-full rounded-md border border-line bg-white px-3 py-2 text-sm"
+              />
+            </label>
+            <label className="block">
+              <span className="text-sm font-medium text-ink">Case review comments</span>
+              <textarea
+                name="case_review_comments"
+                rows={3}
+                defaultValue={note.case_review_comments ?? ""}
+                className="focus-ring mt-1 w-full rounded-md border border-line bg-white px-3 py-2 text-sm"
+              />
+            </label>
+          </div>
+
           <div className="grid gap-4 md:grid-cols-[1fr_220px]">
             <label className="block">
               <span className="text-sm font-medium text-ink">Next step</span>

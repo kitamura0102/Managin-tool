@@ -47,6 +47,8 @@ create table if not exists public.notes (
   employee_response text,
   next_step text,
   follow_up_date date,
+  complaints text,
+  case_review_comments text,
   severity text not null default 'Low' check (severity in ('Low', 'Medium', 'High')),
   visibility text not null default 'Private note' check (visibility in ('Private note', 'Manager-ready summary')),
   is_1on1_talking_point boolean not null default false,

@@ -33,6 +33,8 @@ export type NoteTemplate = {
     feedback_given: string;
     employee_response: string;
     next_step: string;
+    complaints: string;
+    case_review_comments: string;
   };
 };
 
@@ -48,7 +50,9 @@ export const NOTE_TEMPLATES: NoteTemplate[] = [
       impact: "How did it affect quality, workload, timeline, client trust, or team coverage?",
       feedback_given: "What feedback did you give and when?",
       employee_response: "How did the employee respond or clarify?",
-      next_step: "What will happen next, and what support or checkpoint is planned?"
+      next_step: "What will happen next, and what support or checkpoint is planned?",
+      complaints: "Did the employee raise any concerns, frustrations, or complaints?",
+      case_review_comments: "Any case review findings relevant to this performance gap?"
     }
   },
   {
@@ -62,7 +66,9 @@ export const NOTE_TEMPLATES: NoteTemplate[] = [
       impact: "Why does this matter for the employee, client, or team?",
       feedback_given: "What coaching, support, or resources were offered?",
       employee_response: "What did the employee acknowledge or ask for?",
-      next_step: "What is the next checkpoint or action?"
+      next_step: "What is the next checkpoint or action?",
+      complaints: "Did the employee express any concerns or frustrations during the conversation?",
+      case_review_comments: "Any case review comments that informed or prompted this coaching?"
     }
   },
   {
@@ -76,7 +82,9 @@ export const NOTE_TEMPLATES: NoteTemplate[] = [
       impact: "Was there any coverage, workload, client, or timeline impact?",
       feedback_given: "What was discussed about handoff, coverage, or expectations?",
       employee_response: "What context did the employee provide?",
-      next_step: "Is any follow-up needed, or is this just context?"
+      next_step: "Is any follow-up needed, or is this just context?",
+      complaints: "Did the employee raise any concerns about the PTO policy or coverage expectations?",
+      case_review_comments: "Any case review comments related to this period?"
     }
   },
   {
@@ -90,7 +98,9 @@ export const NOTE_TEMPLATES: NoteTemplate[] = [
       impact: "What positive impact did it have?",
       feedback_given: "Was recognition given? If so, when and how?",
       employee_response: "How did the employee respond?",
-      next_step: "How can this behavior be reinforced or shared?"
+      next_step: "How can this behavior be reinforced or shared?",
+      complaints: "Did the employee mention anything they'd like to improve or that concerns them?",
+      case_review_comments: "Any case review highlights that support this positive feedback?"
     }
   }
 ];

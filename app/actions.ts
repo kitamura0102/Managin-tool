@@ -82,6 +82,8 @@ export async function createNote(formData: FormData) {
       employee_response: nullableString(formData, "employee_response"),
       next_step: nullableString(formData, "next_step"),
       follow_up_date: nullableDate(formData, "follow_up_date"),
+      complaints: nullableString(formData, "complaints"),
+      case_review_comments: nullableString(formData, "case_review_comments"),
       severity: (readString(formData, "severity") || "Low") as Severity,
       visibility: (readString(formData, "visibility") || "Private note") as Visibility,
       is_1on1_talking_point: formData.get("is_1on1_talking_point") === "on"
@@ -205,6 +207,8 @@ export async function updateNote(formData: FormData) {
       employee_response: nullableString(formData, "employee_response"),
       next_step: nullableString(formData, "next_step"),
       follow_up_date: nullableDate(formData, "follow_up_date"),
+      complaints: nullableString(formData, "complaints"),
+      case_review_comments: nullableString(formData, "case_review_comments"),
       severity: (readString(formData, "severity") || "Low") as Severity,
       visibility: (readString(formData, "visibility") || "Private note") as Visibility,
       is_1on1_talking_point: formData.get("is_1on1_talking_point") === "on"
