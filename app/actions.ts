@@ -221,6 +221,34 @@ export async function updateNote(formData: FormData) {
   redirect(`/employees/${employeeId}`);
 }
 
+export async function addTalkPoint(formData: FormData) {
+  const { supabase, user } = await getUserContext();
+
+  const { data, error } = await supabase
+    .from("talk_points")
+    .insert({
+      user_id: user.id,
+      employee_id: readString(formData, "employee_id"),
+      content: readString(formData, "content")
+    })
+    .select("id, content")
+    .single();
+
+  if (error) throw new Error(error.message);
+  return data as { id: string; content: string };
+}
+
+export async function deleteTalkPoint(formData: FormData) {
+  const { supabase } = await getUserContext();
+
+  const { error } = await supabase
+    .from("talk_points")
+    .delete()
+    .eq("id", readString(formData, "id"));
+
+  if (error) throw new Error(error.message);
+}
+
 export async function updateFollowUpStatus(formData: FormData) {
   const { supabase } = await getUserContext();
   const id = readString(formData, "id");

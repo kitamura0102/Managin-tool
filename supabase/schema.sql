@@ -81,6 +81,14 @@ create table if not exists public.weekly_reviews (
   updated_at timestamptz not null default now()
 );
 
+create table if not exists public.talk_points (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users(id) on delete cascade,
+  employee_id uuid not null references public.employees(id) on delete cascade,
+  content text not null,
+  created_at timestamptz not null default now()
+);
+
 create index if not exists employees_user_id_idx on public.employees(user_id);
 create index if not exists employees_status_idx on public.employees(status);
 create index if not exists notes_user_id_idx on public.notes(user_id);
@@ -111,6 +119,16 @@ drop trigger if exists set_weekly_reviews_updated_at on public.weekly_reviews;
 create trigger set_weekly_reviews_updated_at
 before update on public.weekly_reviews
 for each row execute function public.set_updated_at();
+
+alter table public.talk_points enable row level security;
+
+drop policy if exists "Users can manage their own talk points" on public.talk_points;
+create policy "Users can manage their own talk points"
+on public.talk_points
+for all
+to authenticated
+using (auth.uid() = user_id)
+with check (auth.uid() = user_id);
 
 alter table public.employees enable row level security;
 alter table public.notes enable row level security;

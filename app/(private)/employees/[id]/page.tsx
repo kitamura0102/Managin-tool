@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/empty-state";
 import { FollowUpStatusForm } from "@/components/follow-up-status-form";
 import { NoteCard } from "@/components/note-card";
 import { PageHeader } from "@/components/page-header";
+import { TalkPointsSection } from "@/components/talk-points-section";
 import { NOTE_CATEGORIES } from "@/lib/constants";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { compactCountLabel, formatDate, isOverdue } from "@/lib/utils";
@@ -19,14 +20,15 @@ export default async function EmployeeProfilePage({
   const { id } = await params;
   const supabase = await createSupabaseServerClient();
 
-  const [employeeResult, notesResult, followUpsResult] = await Promise.all([
+  const [employeeResult, notesResult, followUpsResult, talkPointsResult] = await Promise.all([
     supabase.from("employees").select("*").eq("id", id).single(),
     supabase.from("notes").select("*").eq("employee_id", id).order("note_date", { ascending: false }),
     supabase
       .from("follow_ups")
       .select("*, notes(id, category, severity)")
       .eq("employee_id", id)
-      .order("follow_up_date", { ascending: true })
+      .order("follow_up_date", { ascending: true }),
+    supabase.from("talk_points").select("id, content").eq("employee_id", id).order("created_at", { ascending: true })
   ]);
 
   if (employeeResult.error || !employeeResult.data) {
@@ -37,7 +39,7 @@ export default async function EmployeeProfilePage({
   const notes = (notesResult.data ?? []) as Note[];
   const followUps = (followUpsResult.data ?? []) as unknown as FollowUp[];
   const openFollowUps = followUps.filter((followUp) => followUp.status === "Open");
-  const talkPoints = notes.filter((note) => note.is_1on1_talking_point);
+  const talkPoints = (talkPointsResult.data ?? []) as { id: string; content: string }[];
   const highSeverityCount = notes.filter((note) => note.severity === "High").length;
   const categoryCounts = NOTE_CATEGORIES.map((category) => ({
     category,
@@ -144,26 +146,7 @@ export default async function EmployeeProfilePage({
         </div>
 
         <div className="space-y-5">
-          {talkPoints.length > 0 && (
-            <section className="rounded-md border border-sage/40 bg-sage/5 p-4">
-              <div className="mb-3 flex items-center gap-2">
-                <span className="text-base">🗣️</span>
-                <h2 className="text-sm font-semibold uppercase tracking-wide text-sage">1:1 Talk Points</h2>
-                <span className="ml-auto rounded-full bg-sage/20 px-2 py-0.5 text-xs font-semibold text-sage">{talkPoints.length}</span>
-              </div>
-              <div className="space-y-2">
-                {talkPoints.map((note) => (
-                  <div key={note.id} className="rounded-md border border-sage/20 bg-white p-3">
-                    <div className="flex items-center gap-2">
-                      <span className="rounded-md bg-sage/10 px-2 py-0.5 text-xs font-medium text-sage">{note.category}</span>
-                      <span className="text-xs text-ink/40">{formatDate(note.note_date)}</span>
-                    </div>
-                    <p className="mt-2 line-clamp-3 text-sm leading-6 text-ink/75">{note.observation}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
+          <TalkPointsSection employeeId={employee.id} initialPoints={talkPoints} />
 
           <section>
             <div className="mb-3 flex items-center justify-between">
